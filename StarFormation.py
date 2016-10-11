@@ -3,13 +3,14 @@ import pygame
 import PyParticles
 
 (width, height) = (400, 400)
+universeScreen = UniverseScreen(width, height)
+
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Star formation')
 universe = PyParticles.Environment(width, height)
 universe.color = (0, 0, 0)
 universe.addFunctions(['move', 'attract', 'combine', 'bounce'])
 
-# test
 
 def calculateRadius(mass):
     return 0.4 * mass ** 0.5
