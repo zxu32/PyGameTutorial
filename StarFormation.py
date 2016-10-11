@@ -43,6 +43,7 @@ for p in range(0, 100):
     universe.addParticles(mass=particleMass, size=particleSize, color=(255, 255, 255))
 
 running = True
+paused = False
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -62,8 +63,11 @@ while running:
                 universeScreen.zoom(0.5)
             if event.key == pygame.K_r:
                 universeScreen.reset()
+            if event.key == pygame.K_SPACE:
+                paused = (True, False)[paused]  # flip the current value of paused
 
-    universe.update()
+    if not paused:
+        universe.update()
     screen.fill(universe.color)
     for p in universe.particles:
         x = int(universeScreen.mx + (universeScreen.dx + p.x) * universeScreen.magnification)
@@ -86,5 +90,3 @@ while running:
             universe.particles.remove(p)
 
     pygame.display.flip()
-
-# universeScreen.scroll(dx=1)
