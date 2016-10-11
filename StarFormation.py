@@ -9,6 +9,7 @@ universe = PyParticles.Environment(width, height)
 universe.color = (0, 0, 0)
 universe.addFunctions(['move', 'attract', 'combine', 'bounce'])
 
+# test
 
 def calculateRadius(mass):
     return 0.4 * mass ** 0.5
