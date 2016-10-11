@@ -25,12 +25,12 @@ class UniverseScreen:
         (self.mx, self.my) = (0, 0)
         self.magnification = 1
 
-# (width, height) = (400, 400)
-universeScreen = UniverseScreen(width, height)
+(w, h) = (400, 400)
+universeScreen = UniverseScreen(w, h)
 
-screen = pygame.display.set_mode((width, height))
+screen = pygame.display.set_mode((w, h))
 pygame.display.set_caption('Star formation')
-universe = PyParticles.Environment(width, height)
+universe = PyParticles.Environment(w, h)
 universe.color = (0, 0, 0)
 universe.addFunctions(['move', 'attract', 'combine', 'bounce'])
 
