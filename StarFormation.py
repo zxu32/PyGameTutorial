@@ -2,7 +2,30 @@ import random as rand
 import pygame
 import PyParticles
 
-(width, height) = (400, 400)
+
+class UniverseScreen:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        (self.dx, self.dy) = (0, 0)
+        (self.mx, self.my) = (0, 0)
+        self.magnification = 1
+
+    def scroll(self, dx=0, dy=0):
+        self.dx += (dx * self.width)/(self.magnification * 10)
+        self.dy += (dy * self.height)/(self.magnification * 10)
+
+    def zoom(self, zoom):
+        self.magnification *= zoom
+        self.mx = (1 - self.magnification) * self.width / 2
+        self.my = (1 - self.magnification) * self.height / 2
+
+    def reset(self):
+        (self.dx, self.dy) = (0, 0)
+        (self.mx, self.my) = (0, 0)
+        self.magnification = 1
+
+# (width, height) = (400, 400)
 universeScreen = UniverseScreen(width, height)
 
 screen = pygame.display.set_mode((width, height))
