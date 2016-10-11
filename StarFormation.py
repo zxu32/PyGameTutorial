@@ -44,26 +44,23 @@ for p in range(0, 100):
 
 running = True
 paused = False
+keyToFunction = {
+    pygame.K_LEFT: (lambda action: action.scroll(dx=1)),
+    pygame.K_RIGHT: (lambda action: action.scroll(dx=-1)),
+    pygame.K_DOWN: (lambda action: action.scroll(dy=-1)),
+    pygame.K_UP: (lambda action: action.scroll(dy=1)),
+    pygame.K_EQUALS: (lambda action: action.zoom(2)),
+    pygame.K_MINUS: (lambda action: action.zoom(0.5)),
+    pygame.K_r: (lambda action: action.reset()),
+}
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                universeScreen.scroll(dx=1)
-            if event.key == pygame.K_RIGHT:
-                universeScreen.scroll(dx=-1)
-            if event.key == pygame.K_UP:
-                universeScreen.scroll(dy=1)
-            if event.key == pygame.K_DOWN:
-                universeScreen.scroll(dy=-1)
-            if event.key == pygame.K_EQUALS:
-                universeScreen.zoom(2)
-            if event.key == pygame.K_MINUS:
-                universeScreen.zoom(0.5)
-            if event.key == pygame.K_r:
-                universeScreen.reset()
-            if event.key == pygame.K_SPACE:
+            if event.key in keyToFunction:
+                keyToFunction[event.key](universeScreen)
+            elif event.key == pygame.K_SPACE:
                 paused = (True, False)[paused]  # flip the current value of paused
 
     if not paused:
