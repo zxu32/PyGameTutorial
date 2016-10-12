@@ -29,22 +29,22 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 paused = (True, False)[paused]  # flip the current value of paused
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN:  # check particle selection
             mouseX, mouseY = pygame.mouse.get_pos()
             selected_particle = universe.findParticles(mouseX, mouseY)
             if selected_particle:
                 color_temp = selected_particle.color
-        elif event.type == pygame.MOUSEBUTTONUP and selected_particle:
+        elif event.type == pygame.MOUSEBUTTONUP and selected_particle:  # de-select particle
             selected_particle.color = color_temp
             selected_particle = None
 
-    if selected_particle:
+    if selected_particle:  # move the selected particle with cursor
         selected_particle.color = (255, 0, 0)
         mouseX, mouseY = pygame.mouse.get_pos()
         selected_particle.mouseMove(mouseX, mouseY)
     if not paused:
         universe.update()
+    screen.fill(universe.color)  # this has to go before pygame's draw function
     for p in universe.particles:  # display particles from previous step
         pygame.draw.circle(screen, p.color, (int(p.x), int(p.y)), p.size, p.thickness)
-    screen.fill(universe.color)
     pygame.display.flip()
