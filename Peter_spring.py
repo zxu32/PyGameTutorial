@@ -31,12 +31,14 @@ while running:
             if event.key == pygame.K_SPACE:
                 paused = (True, False)[paused]
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            selected_particle = universe.findParticle(pygame.mouse.get_pos())
+            mouseX, mouseY = pygame.mouse.get_pos()
+            selected_particle = universe.findParticle(mouseX, mouseY)
         elif event.type == pygame.MOUSEBUTTONUP:
             selected_particle = None
 
     if selected_particle:
-        selected_particle.mouseMove(pygame.mouse.get_pos())
+        mouseX, mouseY = pygame.mouse.get_pos()
+        selected_particle.mouseMove(mouseX, mouseY)
     if not paused:
         universe.update()
 

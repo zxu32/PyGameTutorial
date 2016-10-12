@@ -165,7 +165,7 @@ class Environment:
             x = kargs.get('x', random.uniform(size, self.width - size))
             y = kargs.get('y', random.uniform(size, self.height - size))
 
-            particle = Particle((x, y), size, mass)
+            particle = Particle(x, y, size, mass)
             particle.speed = kargs.get('speed', random.random())
             particle.angle = kargs.get('angle', random.uniform(0, math.pi * 2))
             particle.colour = kargs.get('colour', (0, 0, 255))
