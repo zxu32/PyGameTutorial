@@ -1,7 +1,6 @@
 import random as rand
 import pygame
 import PyParticles
-import math
 
 
 class UniverseScreen:
@@ -30,26 +29,30 @@ class UniverseScreen:
 universeScreen = UniverseScreen(w, h)
 
 screen = pygame.display.set_mode((w, h))
-pygame.display.set_caption('Springs')
-universe = PyParticles.Environment(w, h, color=(255, 255, 255))
-universe.acceleration = (math.pi, 0.01)
-universe.mass_of_air = 0.02
-universe.addFunctions(['move', 'drag', 'combine', 'bounce', 'collide', 'accelerate'])
+pygame.display.set_caption('Star formation')
+universe = PyParticles.Environment(w, h, color=(0, 0, 0))
+universe.addFunctions(['move', 'attract', 'combine', 'bounce'])
 
 
-# def calculateRadius(mass):
-#     return 0.4 * mass ** 0.5
+def calculateRadius(mass):
+    return 0.4 * mass ** 0.5
 
-for p in range(0, 4):
-    particleMass = 100
-    particleSize = 16
-    universe.addParticles(mass=particleMass, size=particleSize, color=(20, 40, 200))
+for p in range(0, 100):
+    particleMass = rand.randint(10, 11)
+    particleSize = int(calculateRadius(particleMass))
+    universe.addParticles(mass=particleMass, size=particleSize, color=(255, 255, 255))
 
 running = True
 paused = False
-selected_particle = None
-color_temp = None
-
+keyToFunction = {
+    pygame.K_LEFT: (lambda action: action.scroll(dx=1)),
+    pygame.K_RIGHT: (lambda action: action.scroll(dx=-1)),
+    pygame.K_DOWN: (lambda action: action.scroll(dy=-1)),
+    pygame.K_UP: (lambda action: action.scroll(dy=1)),
+    pygame.K_EQUALS: (lambda action: action.zoom(2)),
+    pygame.K_MINUS: (lambda action: action.zoom(0.5)),
+    pygame.K_r: (lambda action: action.reset()),
+}
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -73,17 +76,14 @@ while running:
         else:
             pygame.draw.circle(screen, p.color, (x, y), int(p.size), 0)
 
-    pygame.display.flip()
+    particleToRemove = []
+    for p in universe.particles:
+        if 'collideWith' in p.__dict__:
+            particleToRemove.append(p.collideWith)
+            p.size = calculateRadius(p.mass)
+            del p.__dict__['collideWith']
+    for p in particleToRemove:
+        if p in universe.particles:
+            universe.particles.remove(p)
 
-#     elif event.type == pygame.MOUSEBUTTONDOWN:
-#     mouseX, mouseY = pygame.mouse.get_pos()
-#     selected_particle = env.findParticles(mouseX, mouseY)
-#     if selected_particle:
-#         color_temp = selected_particle.color
-# elif event.type == pygame.MOUSEBUTTONUP and selected_particle:
-# selected_particle.color = color_temp
-# selected_particle = None
-# if selected_particle:
-#     selected_particle.color = (255, 0, 0)
-#     mouseX, mouseY = pygame.mouse.get_pos()
-#     selected_particle.mouseMove(mouseX, mouseY)
+    pygame.display.flip()
