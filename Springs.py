@@ -24,7 +24,9 @@ running = True
 paused = False
 selected_particle = None
 color_temp = None
-
+"""
+code below runs the game
+"""
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -50,4 +52,6 @@ while running:
     screen.fill(universe.color)  # this has to go before pygame's draw function
     for p in universe.particles:  # display particles from previous step
         pygame.draw.circle(screen, p.color, (int(p.x), int(p.y)), p.size, p.thickness)
+    for s in universe.springs:
+        pygame.draw.aaline(screen, (0, 0, 0), (int(s.p1.x), int(s.p1.y)), (int(s.p2.x), int(s.p2.y)))
     pygame.display.flip()
