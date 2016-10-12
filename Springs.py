@@ -36,10 +36,6 @@ universe.acceleration = (math.pi, 0.01)
 universe.mass_of_air = 0.02
 universe.addFunctions(['move', 'drag', 'combine', 'bounce', 'collide', 'accelerate'])
 
-
-# def calculateRadius(mass):
-#     return 0.4 * mass ** 0.5
-
 for p in range(0, 4):
     particleMass = 100
     particleSize = 16
@@ -54,12 +50,22 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key in keyToFunction:
-                keyToFunction[event.key](universeScreen)
-            elif event.key == pygame.K_SPACE:
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
                 paused = (True, False)[paused]  # flip the current value of paused
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouseX, mouseY = pygame.mouse.get_pos()
+            selected_particle = universe.findParticles(mouseX, mouseY)
+            if selected_particle:
+                color_temp = selected_particle.color
+        elif event.type == pygame.MOUSEBUTTONUP and selected_particle:
+            selected_particle.color = color_temp
+            selected_particle = None
 
+    if selected_particle:
+        selected_particle.color = (255, 0, 0)
+        mouseX, mouseY = pygame.mouse.get_pos()
+        selected_particle.mouseMove(mouseX, mouseY)
     if not paused:
         universe.update()
     screen.fill(universe.color)
@@ -74,16 +80,3 @@ while running:
             pygame.draw.circle(screen, p.color, (x, y), int(p.size), 0)
 
     pygame.display.flip()
-
-#     elif event.type == pygame.MOUSEBUTTONDOWN:
-#     mouseX, mouseY = pygame.mouse.get_pos()
-#     selected_particle = env.findParticles(mouseX, mouseY)
-#     if selected_particle:
-#         color_temp = selected_particle.color
-# elif event.type == pygame.MOUSEBUTTONUP and selected_particle:
-# selected_particle.color = color_temp
-# selected_particle = None
-# if selected_particle:
-#     selected_particle.color = (255, 0, 0)
-#     mouseX, mouseY = pygame.mouse.get_pos()
-#     selected_particle.mouseMove(mouseX, mouseY)
