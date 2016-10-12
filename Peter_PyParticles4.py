@@ -10,7 +10,7 @@ def addVectors(angle1, length1, angle2, length2):
     angle = 0.5 * math.pi - math.atan2(y, x)
     length = math.hypot(x, y)
 
-    return (angle, length)
+    return angle, length
 
 
 def combine(p1, p2):
@@ -18,8 +18,8 @@ def combine(p1, p2):
         total_mass = p1.mass + p2.mass
         p1.x = (p1.x * p1.mass + p2.x * p2.mass) / total_mass
         p1.y = (p1.y * p1.mass + p2.y * p2.mass) / total_mass
-        (p1.angle, p1.speed) = addVectors((p1.angle, p1.speed * p1.mass / total_mass),
-                                          (p2.angle, p2.speed * p2.mass / total_mass))
+        (p1.angle, p1.speed) = addVectors(p1.angle, p1.speed * p1.mass / total_mass,
+                                          p2.angle, p2.speed * p2.mass / total_mass)
         p1.speed *= (p1.elasticity * p2.elasticity)
         p1.mass += p2.mass
         p1.collide_with = p2
@@ -37,10 +37,10 @@ def collide(p1, p2):
         angle = math.atan2(dy, dx) + 0.5 * math.pi
         total_mass = p1.mass + p2.mass
 
-        (p1.angle, p1.speed) = addVectors((p1.angle, p1.speed * (p1.mass - p2.mass) / total_mass),
-                                          (angle, 2 * p2.speed * p2.mass / total_mass))
-        (p2.angle, p2.speed) = addVectors((p2.angle, p2.speed * (p2.mass - p1.mass) / total_mass),
-                                          (angle + math.pi, 2 * p1.speed * p1.mass / total_mass))
+        (p1.angle, p1.speed) = addVectors(p1.angle, p1.speed * (p1.mass - p2.mass) / total_mass,
+                                          angle, 2 * p2.speed * p2.mass / total_mass)
+        (p2.angle, p2.speed) = addVectors(p2.angle, p2.speed * (p2.mass - p1.mass) / total_mass,
+                                          angle + math.pi, 2 * p1.speed * p1.mass / total_mass)
         elasticity = p1.elasticity * p2.elasticity
         p1.speed *= elasticity
         p2.speed *= elasticity
@@ -85,7 +85,7 @@ class Particle:
 
     def accelerate(self, vector):
         """ Change angle and speed by a given vector """
-        (self.angle, self.speed) = addVectors((self.angle, self.speed), vector)
+        (self.angle, self.speed) = addVectors(self.angle, self.speed, vector[0], vector[1])
 
     def attract(self, other):
         """" Change velocity based on gravatational attraction between two particle"""
