@@ -11,14 +11,16 @@ universe = PyParticles.Environment(w, h, color=(255, 255, 255))
 universe.acceleration = (math.pi, 0.01)
 universe.mass_of_air = 0.02
 universe.addFunctions(['move', 'drag', 'combine', 'bounce', 'collide', 'accelerate'])
-universe.addSpring(0, 1, length=100, strength=0.5)
-universe.addSpring(1, 2, length=100, strength=0.1)
-universe.addSpring(2, 0, length=80, strength=0.05)
 
 for p in range(0, 4):
     particleMass = 100
     particleSize = 16
     universe.addParticles(mass=particleMass, size=particleSize, color=(20, 40, 200))
+
+universe.addSpring(0, 1, length=100, strength=0.5)
+universe.addSpring(1, 2, length=100, strength=0.1)
+universe.addSpring(2, 0, length=80, strength=0.05)
+
 
 running = True
 paused = False
