@@ -69,7 +69,6 @@ class Particle:
 
     def move(self):
         """ Update position based on speed, angle """
-
         self.x += math.sin(self.angle) * self.speed
         self.y -= math.cos(self.angle) * self.speed
 
